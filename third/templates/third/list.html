@@ -1,0 +1,49 @@
+{% extends 'third/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+<!--컨테이너라는 div안에서 레스토랑 정보가 뜨게 하기-->
+    {% for item in restaurants %}
+    <div class="row restaurant-item" style="margin:20px auto;">
+        <div class="col-sm-12"> <!--화면을 꽉 차게 하기 위한 것-->
+            <div class="card border-secondary">
+              <div class="card-body">
+                <h5 class="card-title">{{ item.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ item.address }}</h6>
+                <p class="card-text">리뷰: {{ item.reviews_count }}개, 평점: {{ item.average_point}}점</p>
+                <p class="card-text">음식점의 설명이 들어갑니다.</p>
+                <a href="{% url 'restaurant-detail' id=item.id %}" class="card-link">자세히 보기</a>
+                <a href="{% url 'restaurant-update' %}?id={{ item.id }}" class="card-link">수정하기</a>
+              </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+     <div class="row">
+        <div class="col-sm-12 text-center">
+            <div class="pagination">
+                <span class="step-links text-center" style="width:100%;">
+                    {% if restaurants.has_previous %}
+                    <!--필터함수-->
+                    <!--만약 이전 페이지가 존재한다면-->
+                        <a href="?page=1">&laquo;</a>
+                        <!--1페이지로 돌아가는 링크-->
+                        <a href="?page={{ restaurants.previous_page_number }}">{{ restaurants.previous_page_number }}</a>
+                        <!--바로 전 페이지로 돌아가는 링크-->
+                    {% endif %}
+                    <span class="current"> <!--현재 페이지-->
+                        {{ restaurants.number }}
+                    </span>
+                    {% if restaurants.has_next %}
+                    <!--만약 다음 페이지가 존재한다면-->
+                        <a href="?page={{ restaurants.next_page_number }}">{{ restaurants.next_page_number }}</a>
+                        ...
+                        <a href="?page={{ restaurants.paginator.num_pages }}">&raquo;</a>
+                        <!--마지막 페이지로 돌아가는 링크-->
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
